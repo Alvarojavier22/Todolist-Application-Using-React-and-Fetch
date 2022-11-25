@@ -1,19 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
 //create your first component
 const Home = () => {
-	const [tasks, setTasks] = useState([
-		"Levantarme",
-		"Ir al baño"
-	])
+	const [tasks, setTasks] = useState([])
 	const [newTask, setNewTask] = useState("")
 	function addTask(e) {
 		if (e.code == "Enter" && newTask != "") {
-			setTasks([...tasks, newTask])
+			setTasks([...tasks, { label: newTask, done: false }])
 			setNewTask("")
 		}
 	}
+
+	useEffect(async () => {
+		if(tasks.length > 0){
+		let resp =  await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22", {
+			method: "PUT",
+			body: JSON.stringify(tasks),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		
+		})
+		if(resp.ok){
+			console.info("Lista actualizada")
+		}
+	}
+	}, [tasks])
+
+	useEffect(async () => {
+		var respuesta = await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22")
+		if (respuesta.status == 404) {
+			//crear lista
+			respuesta = await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22", {
+				method: "POST",
+				body: JSON.stringify([]),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			})
+			respuesta = await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22")
+		} else if (!respuesta.ok) {
+			//error
+			console.error("Error al cargar la lista: " + respuesta.statusText)
+		}
+		//cargar la data del body
+		var data = await respuesta.json()
+		setTasks(data)
+	}, [])
+
 	const [deleteTask, setDeleteTask] = useState("")
 
 	function removeTask(index) {
@@ -42,7 +77,7 @@ const Home = () => {
 					{tasks.map((task, index) => (
 						<li key={index}
 							className="list-group-item d-flex justify-content-between  align-items-center">
-							{task}
+							{task.label}
 							<button onClick={() => removeTask(index)} className="badge bg-danger rounded-pill">X</button>
 						</li>
 					))}
