@@ -13,19 +13,19 @@ const Home = () => {
 	}
 
 	useEffect(async () => {
-		if(tasks.length > 0){
-		let resp =  await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22", {
-			method: "PUT",
-			body: JSON.stringify(tasks),
-			headers: {
-				"Content-Type": "application/json"
+		if (tasks.length > 0) {
+			let resp = await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22", {
+				method: "PUT",
+				body: JSON.stringify(tasks),
+				headers: {
+					"Content-Type": "application/json"
+				}
+
+			})
+			if (resp.ok) {
+				console.info("Lista actualizada")
 			}
-		
-		})
-		if(resp.ok){
-			console.info("Lista actualizada")
 		}
-	}
 	}, [tasks])
 
 	useEffect(async () => {
@@ -43,13 +43,18 @@ const Home = () => {
 		} else if (!respuesta.ok) {
 			//error
 			console.error("Error al cargar la lista: " + respuesta.statusText)
-		}
+
+			//Eliminar elementos
+		} else if (index == "")
+			respuesta = await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22", {
+				method: "DELETE",
+				body: []
+			})
 		//cargar la data del body
 		var data = await respuesta.json()
 		setTasks(data)
 	}, [])
 
-	const [deleteTask, setDeleteTask] = useState("")
 
 	function removeTask(index) {
 		console.log(index)
@@ -77,8 +82,17 @@ const Home = () => {
 					{tasks.map((task, index) => (
 						<li key={index}
 							className="list-group-item d-flex justify-content-between  align-items-center">
-							{task.label}
+							<div class="form-check">
+								<input 
+								onChange={(() => checkTasks)}
+								class="form-check-input" type="checkbox" value= {tasks.done} id="flexCheckDefault" />
+								<label class="form-check-label" for="flexCheckDefault">
+									{task.done}
+								</label>
+								{task.label}
+							</div>
 							<button onClick={() => removeTask(index)} className="badge bg-danger rounded-pill">X</button>
+
 						</li>
 					))}
 					<li className="list-group-item text-center disabled text-muted d-flex justify-content-center align-items-center">
