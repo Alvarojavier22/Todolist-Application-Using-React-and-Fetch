@@ -62,7 +62,15 @@ const Home = () => {
 		var newTasks = [...tasks]
 		newTasks.splice(index, 1)
 		setTasks(newTasks)
+	
 	}
+
+	function checkTask (index) {
+		let newTask = [...tasks]
+		newTask[index] = {...newTask[index], done: !newTask[index].done}
+		setTasks(newTask)
+	}
+
 
 	return (
 		<div className="container">
@@ -77,21 +85,26 @@ const Home = () => {
 							onKeyDown={e => addTask(e)}
 							onChange={e => setNewTask(e.target.value)}
 							value={newTask}
-							name="task" id="task" placeholder="What we have to do?" />
+							name="task" id="task" 
+							placeholder="What we have to do?" />
 					</li>
 					{tasks.map((task, index) => (
 						<li key={index}
 							className="list-group-item d-flex justify-content-between  align-items-center">
-							<div class="form-check">
+							<div className="form-check">
 								<input 
-								onChange={(() => checkTasks)}
-								class="form-check-input" type="checkbox" value= {tasks.done} id="flexCheckDefault" />
-								<label class="form-check-label" for="flexCheckDefault">
-									{task.done}
-								</label>
+								onChange={() => checkTask(index)}
+								className="form-check-input" 
+								type="checkbox" 
+								value= {tasks.done} 
+								id="flexCheckDefault" />
+								<label className="form-check-label">
 								{task.label}
+								</label>
 							</div>
-							<button onClick={() => removeTask(index)} className="badge bg-danger rounded-pill">X</button>
+							<button 
+							onClick={() => removeTask(index)} 
+							className="badge bg-danger rounded-pill">X</button>
 
 						</li>
 					))}

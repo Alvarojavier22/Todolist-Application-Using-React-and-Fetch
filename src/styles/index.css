@@ -10,9 +10,9 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
-
 body {
-    background-color: blue;
+    background-image: url("https://imgs.search.brave.com/kVEr_tL4QPEEQtg5PepnUYc9qtZAJIWWX9xJHlhlSJU/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9ibG9n/Lm9wZW5jbGFzc3Jv/b21zLmNvbS9lcy93/cC1jb250ZW50L3Vw/bG9hZHMvc2l0ZXMv/NS8yMDE3LzA5L0Fk/b2JlU3RvY2tfMTI2/MDE2ODg5YXBhaXNh/ZG8uanBn");
+    background-size: cover;
 }
 
 .h1 {
