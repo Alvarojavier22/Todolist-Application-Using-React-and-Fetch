@@ -14,7 +14,7 @@ const Home = () => {
 
 	useEffect(async () => {
 		if (tasks.length > 0) {
-			let resp = await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22", {
+			var resp = await fetch("https://assets.breatheco.de/apis/fake/todos/user/Alvarojavier22", {
 				method: "PUT",
 				body: JSON.stringify(tasks),
 				headers: {
